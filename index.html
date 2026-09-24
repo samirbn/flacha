@@ -1491,11 +1491,18 @@
         </div>
     </footer>
 
+    <!-- Floating WhatsApp Contact Button -->
+    <a href="https://wa.me/213664764206?text=%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%AD%D8%A7%D8%A8%20%D9%86%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%84%D9%89%20%D9%81%D9%84%D8%A7%D8%B4%D8%A9%20%D9%85%D9%86%D9%87%D8%A7%D8%AC%20%D8%A7%D9%84%D9%84%D8%BA%D8%A9%20%D8%A7%D9%84%D8%A5%D9%86%D8%AC%D9%84%D9%8A%D8%B2%D9%8A%D8%A9%20%D9%84%D9%84%D8%A7%D8%A8%D8%AA%D8%AF%D8%A7%D8%A6%D9%8A" target="_blank" class="floating-whatsapp-btn" style="position: fixed; bottom: 25px; left: 25px; background: #25D366; color: #fff; border-radius: 50px; padding: 12px 22px; display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-heading); font-weight: 800; font-size: 0.95rem; box-shadow: 0 8px 25px rgba(37, 211, 102, 0.45); z-index: 999; transition: var(--transition);">
+        <i class="fa-brands fa-whatsapp" style="font-size: 1.4rem;"></i>
+        <span>تواصل عبر واتساب</span>
+    </a>
+
     <!-- Interactive Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('orderForm');
             const successBox = document.getElementById('orderSuccess');
+            const whatsappNumber = "213664764206";
 
             if (form) {
                 form.addEventListener('submit', (e) => {
@@ -1512,12 +1519,40 @@
                         return;
                     }
 
-                    // Hide form and show success confirmation message
+                    // Format WhatsApp Order Message
+                    const message = 
+`📦 *طلب جديد: فلاشة منهاج الإنجليزية للطور الابتدائي (3، 4، 5)*
+-----------------------------------
+👤 *الاسم واللقب:* ${name}
+📞 *رقم الهاتف:* ${phone}
+📍 *الولاية:* ${wilaya}
+🏙️ *البلدية / العنوان:* ${commune}
+🚚 *طريقة الاستلام:* ${type}
+-----------------------------------
+📚 *المحتوى:* حقيبة أستاذ اللغة الإنجليزية الشاملة (3AP + 4AP + 5AP)
+يرجى تأكيد الطلب وتحديد موعد التوصيل. شكراً!`;
+
+                    const encodedMessage = encodeURIComponent(message);
+                    const waUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+                    // Update and show success confirmation message with direct WhatsApp link
+                    successBox.innerHTML = `
+                        <i class="fa-solid fa-circle-check"></i>
+                        <h3>تم تسجيل طلبك بنجاح! 🎉</h3>
+                        <p>شكراً لثقتكم <strong>${name}</strong>. يتم الآن تحويلك إلى واتساب لتأكيد الإرسال فوراً مع خدمة العملاء.</p>
+                        <div style="margin-top: 20px;">
+                            <a href="${waUrl}" target="_blank" class="btn btn-gold" style="background: #25D366; color: #fff; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);">
+                                <i class="fa-brands fa-whatsapp"></i> فتح المحادثة على واتساب الآن
+                            </a>
+                        </div>
+                    `;
+
                     form.style.display = 'none';
                     successBox.style.display = 'block';
-
-                    // Smooth scroll into view
                     successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Open WhatsApp automatically
+                    window.open(waUrl, '_blank');
                 });
             }
         });
